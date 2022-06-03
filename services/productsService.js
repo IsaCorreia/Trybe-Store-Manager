@@ -1,11 +1,12 @@
 const productsModel = require('../models/productsModel');
 
 const getProducts = async ({ id }) => {
+  let products;
   if (id) {
-    const products = await productsModel.getProductsById(id);
-    return products;
+    products = await productsModel.getProductsById(id);
+  } else {
+    products = await productsModel.getProducts();
   }
-  const products = await productsModel.getProducts();
   return products;
 };
 
