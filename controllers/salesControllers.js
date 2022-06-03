@@ -1,10 +1,14 @@
 const salesService = require('../services/salesService');
+const {
+  HTTP_OK_STATUS,
+  HTTP_NOT_FOUND_STATUS,
+} = require('../helpers/httpStatusCodes');
 
 const getSales = async (req, res) => {
   const sales = await salesService.getSales(req.params);
   return !sales.length
-    ? res.status(404).json({ message: 'Sale not found' })
-    : res.status(200).json(sales);
+    ? res.status(HTTP_NOT_FOUND_STATUS).json({ message: 'Sale not found' })
+    : res.status(HTTP_OK_STATUS).json(sales);
 };
 
 module.exports = {
