@@ -9,5 +9,6 @@ router.post('/products', indexMiddleware.productValidation);
 
 router.get('/sales', salesController.getSales);
 router.get('/sales/:id', salesController.getSales);
+router.post('/sales', indexMiddleware.saleValidation);
 
 module.exports = router;
