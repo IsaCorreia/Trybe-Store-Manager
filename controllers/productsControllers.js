@@ -2,6 +2,8 @@ const productsService = require('../services/productsService');
 const {
   HTTP_OK_STATUS,
   HTTP_NOT_FOUND_STATUS,
+  HTTP_CREATED_STATUS,
+  HTTP_CONFLICT_STATUS,
 } = require('../helpers/httpStatusCodes');
 
 const getProducts = async (req, res) => {
@@ -11,6 +13,14 @@ const getProducts = async (req, res) => {
     : res.status(HTTP_OK_STATUS).json(products);
 };
 
+const addProducts = async (req, res) => {
+  const newProduct = await productsService.addProducts(req.body);
+  return newProduct === false
+    ? res.status(HTTP_CONFLICT_STATUS).json({ message: 'Product already exists' })
+    : res.status(HTTP_CREATED_STATUS).json(newProduct);
+};
+
 module.exports = {
   getProducts,
+  addProducts,
 };
