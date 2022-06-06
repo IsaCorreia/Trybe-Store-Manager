@@ -5,7 +5,7 @@ const indexMiddleware = require('./middlewares/indexMiddleware');
 
 router.get('/products', productsController.getProducts);
 router.get('/products/:id', productsController.getProducts);
-router.post('/products', indexMiddleware.productValidation, productsController.addProducts);
+router.post('/products', indexMiddleware.productValidation, productsController.addProduct);
 router.put('/products/:id', indexMiddleware.productValidation);
 
 router.get('/sales', salesController.getSales);

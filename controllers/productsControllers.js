@@ -13,8 +13,8 @@ const getProducts = async (req, res) => {
     : res.status(HTTP_OK_STATUS).json(products);
 };
 
-const addProducts = async (req, res) => {
-  const newProduct = await productsService.addProducts(req.body);
+const addProduct = async (req, res) => {
+  const newProduct = await productsService.addProduct(req.body);
   return newProduct === false
     ? res.status(HTTP_CONFLICT_STATUS).json({ message: 'Product already exists' })
     : res.status(HTTP_CREATED_STATUS).json(newProduct);
@@ -22,5 +22,5 @@ const addProducts = async (req, res) => {
 
 module.exports = {
   getProducts,
-  addProducts,
+  addProduct,
 };
