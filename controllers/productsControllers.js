@@ -4,6 +4,7 @@ const {
   HTTP_NOT_FOUND_STATUS,
   HTTP_CREATED_STATUS,
   HTTP_CONFLICT_STATUS,
+  HTTP_NO_CONTENT_STATUS,
 } = require('../helpers/httpStatusCodes');
 
 const getProducts = async (req, res) => {
@@ -27,8 +28,16 @@ const updateProduct = async (req, res) => {
     : res.status(HTTP_OK_STATUS).json(updatedProduct);
 };
 
+const deleteProduct = async (req, res) => {
+  const deletedProduct = await productsService.deleteProduct(req.params);
+  return deletedProduct === false
+    ? res.status(HTTP_NOT_FOUND_STATUS).json({ message: 'Product not found' })
+    : res.status(HTTP_NO_CONTENT_STATUS).send();
+};
+
 module.exports = {
   getProducts,
   addProduct,
   updateProduct,
+  deleteProduct,
 };
