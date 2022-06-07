@@ -7,6 +7,7 @@ router.get('/products', productsController.getProducts);
 router.get('/products/:id', productsController.getProducts);
 router.post('/products', indexMiddleware.productValidation, productsController.addProduct);
 router.put('/products/:id', indexMiddleware.productValidation, productsController.updateProduct);
+router.delete('/products/:id', productsController.deleteProduct);
 
 router.get('/sales', salesController.getSales);
 router.get('/sales/:id', salesController.getSales);
