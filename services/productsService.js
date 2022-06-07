@@ -28,8 +28,15 @@ const updateProduct = async ({ id }, { name, quantity }) => {
   return updatedProduct;
 };
 
+const deleteProduct = async ({ id }) => {
+  const canDelete = await productsModel.getProductsById(id);
+  if (!canDelete) return false;
+  await productsModel.deleteProduct(id);
+};
+
 module.exports = {
   getProducts,
   addProduct,
   updateProduct,
+  deleteProduct,
 };
