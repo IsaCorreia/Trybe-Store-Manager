@@ -20,7 +20,16 @@ const addProduct = async ({ name, quantity }) => {
   return canCreate;
 };
 
+const updateProduct = async ({ id }, { name, quantity }) => {
+  const canUpdate = await productsModel.getProductsById(id);
+  if (!canUpdate) return false;
+  await productsModel.updateProduct(id, name, quantity);
+  const updatedProduct = await productsModel.getProductsById(id);
+  return updatedProduct;
+};
+
 module.exports = {
   getProducts,
   addProduct,
+  updateProduct,
 };
