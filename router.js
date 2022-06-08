@@ -11,7 +11,7 @@ router.delete('/products/:id', productsController.deleteProduct);
 
 router.get('/sales', salesController.getSales);
 router.get('/sales/:id', salesController.getSales);
-router.post('/sales', indexMiddleware.saleValidation);
+router.post('/sales', indexMiddleware.saleValidation, salesController.addSale);
 router.put('/sales/:id', indexMiddleware.saleValidation);
 
 module.exports = router;
