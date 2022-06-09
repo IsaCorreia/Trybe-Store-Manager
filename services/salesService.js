@@ -19,6 +19,19 @@ const getSales = async ({ id }) => {
   }));
 };
 
+const addSale = async (sales) => {
+  await sales.forEach(async ({ productId, quantity }) =>
+    salesModel.addSale(productId, quantity));
+  return {
+    id: await salesModel.getLastSale(),
+    itemsSold: sales.map(({ productId, quantity }) => ({
+      productId,
+      quantity,
+    })),
+  };
+};
+
 module.exports = {
   getSales,
+  addSale,
 };
