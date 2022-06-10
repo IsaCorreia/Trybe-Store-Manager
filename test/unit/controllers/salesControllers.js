@@ -26,4 +26,24 @@ describe("---> Teste de Controllers: Sales", () => {
       });
     });
 
+  describe(" GET /sales/:id", () => {
+    describe("com ID válido", () => {
+      let response;
+      before(async () => {
+        response = await chai.request(server).get("/sales/1");
+      });
+
+      it("É recebido código 200",  () => {
+        expect(response).to.have.status(200);
+      });
+      
+      it("É recebido a venda selecionado",  () => {
+        expect(response).to.be.an("object");
+        const parseResponse = JSON.parse(response.text);
+        expect(parseResponse[0]).to.have.property("productId");
+        expect(parseResponse[0]).to.have.property("quantity");
+        expect(parseResponse[0]).to.have.property("date");
+      });
+    } );
+  });
 });
