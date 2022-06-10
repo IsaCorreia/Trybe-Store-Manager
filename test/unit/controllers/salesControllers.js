@@ -1,13 +1,14 @@
 const sinon = require("sinon");
 const chai = require("chai");
-const chaiHttp = require("chai-http");
-chai.use(chaiHttp);
+// const chaiHttp = require("chai-http");
+// chai.use(chaiHttp);
 const { expect } = chai;
 
+const salesController = require("../../../controllers/salesControllers");
 const salesService = require("../../../services/salesService");
-const app = require("../../../app");
+// const app = require("../../../app");
 
-const salesMock = [
+const allSalesMock = [
   {
     saleId: 1,
     productId: 1,
@@ -15,7 +16,16 @@ const salesMock = [
     date: "",
   },
 ];
-const errorMock = { message: "Product not found" };
+
+const idSaleMock = [
+  {
+    productId: 1,
+    quantity: 1,
+    date: "",
+  },
+];
+
+const errorMock = { message: "Sale not found" };
 
 describe("---> Teste de Controllers: Sales", () => {
   describe("GET /sales", () => {
@@ -23,63 +33,84 @@ describe("---> Teste de Controllers: Sales", () => {
     let response = {};
     before(async () => {
       request.body = {};
-      sinon.stub(salesService, "getSales").resolves(salesMock);
-      response = await chai.request(app).get("/sales");
+      response.status = sinon.stub().returns(response);
+      response.json = sinon.stub().returns(allSalesMock);
+      sinon.stub(salesService, "getSales").resolves(allSalesMock);
     });
 
     after(() => {
       salesService.getSales.restore();
     });
 
-    it("É recebido código 200", () => {
-      expect(response).to.have.status(200);
+    it("É recebido código 200", async () => {
+      await salesController.getSales(request, response);
+      expect(response.status.calledWith(200)).to.be.true;
     });
 
-    it("É recebido a lista de vendas", () => {
-      expect(response).to.be.an("object");
-      const parseResponse = JSON.parse(response.text);
-      expect(parseResponse[0]).to.have.property("saleId");
-      expect(parseResponse[0]).to.have.property("productId");
-      expect(parseResponse[0]).to.have.property("quantity");
-      expect(parseResponse[0]).to.have.property("date");
+    it("É recebido a lista de vendas", async () => {
+      const result = await salesController.getSales(request, response);
+      expect(result).to.be.an("array");
+      expect(result[0]).to.have.property("saleId");
+      expect(result[0]).to.have.property("productId");
+      expect(result[0]).to.have.property("quantity");
+      expect(result[0]).to.have.property("date");
     });
   });
 
   describe(" GET /sales/:id", () => {
     describe("com ID válido", () => {
-      let response;
+      let request = {};
+      let response = {};
       before(async () => {
-        response = await chai.request(app).get("/sales/1");
+        request.params = { id: 1 };
+        request.body = {};
+        response.status = sinon.stub().returns(response);
+        response.json = sinon.stub().returns(idSaleMock);
+        sinon.stub(salesService, "getSales").resolves(idSaleMock);
       });
 
-      it("É recebido código 200", () => {
-        expect(response).to.have.status(200);
+      after(() => {
+        salesService.getSales.restore();
       });
 
-      it("É recebido a venda selecionado", () => {
-        expect(response).to.be.an("object");
-        const parseResponse = JSON.parse(response.text);
-        expect(parseResponse[0]).to.have.property("productId");
-        expect(parseResponse[0]).to.have.property("quantity");
-        expect(parseResponse[0]).to.have.property("date");
+      it("É recebido código 200", async () => {
+        await salesController.getSales(request, response);
+        expect(response.status.calledWith(200)).to.be.true;
+      });
+
+      it("É recebido a venda selecionado", async () => {
+        const result = await salesController.getSales(request, response);
+        expect(result).to.be.an("array");
+        expect(result[0]).to.have.property("productId");
+        expect(result[0]).to.have.property("quantity");
+        expect(result[0]).to.have.property("date");
       });
     });
     describe("com ID inválido", () => {
-      let response;
+      let request = {};
+      let response = {};
       before(async () => {
-        response = await chai.request(app).get("/sales/100");
+        request.params = { id: 100 };
+        request.body = {};
+        response.status = sinon.stub().returns(response);
+        response.json = sinon.stub().returns(errorMock);
+        sinon.stub(salesService, "getSales").resolves(errorMock);
       });
 
-      it("É recebido código 404", () => {
-        expect(response).to.have.status(404);
+      after(() => {
+        salesService.getSales.restore();
       });
 
-      it("É recebido a mensagem 'Sale not found'", () => {
-        expect(response).to.be.an("object");
+      it("É recebido código 404", async () => {
+        await salesController.getSales(request, response);
+        expect(response.status.calledWith(404)).to.be.true;
+      });
 
-        const parseResponse = JSON.parse(response.text);
-        expect(parseResponse).to.have.property("message");
-        expect(parseResponse.message).to.be.an.string("Sale not found");
+      it("É recebido a mensagem 'Sale not found'", async () => {
+        const result = await salesController.getSales(request, response);
+        expect(result).to.be.an("object");
+        expect(result).to.have.property("message");
+        expect(result.message).to.be.an.string("Sale not found");
       });
     });
   });
