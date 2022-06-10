@@ -83,11 +83,13 @@ describe("---> Teste de Controllers: Products", () => {
       let response = {};
 
       before(async () => {
-      let response;
-      before( async () => {
-        response = await chai.request(server).get("/products/100");
+        // request.body = {};
+        // sinon.stub(productsService, "getProducts").resolves(errorMock);
         response = await chai.request(app).get("/products/100");
       });
+      // after(() => {
+      //   productsService.getProducts.restore();
+      // });
 
       it("É recebido código 404", () => {
         expect(response).to.have.status(404);
