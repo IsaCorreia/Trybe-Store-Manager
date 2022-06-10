@@ -26,4 +26,25 @@ describe("---> Teste de Controllers: Products", () => {
       });
   });
 
+  describe(" GET /products/:id", () => {
+    describe("com ID válido", () => {
+      let response;
+      before(async () => {
+        response = await chai.request(server).get("/products/1");
+      });
+
+      it("É recebido código 200",  () => {
+        expect(response).to.have.status(200);
+      });
+
+      it("É recebido o produto selecionado",  () => {
+        expect(response).to.be.an("object");
+
+        const parseResponse = JSON.parse(response.text);
+        expect(parseResponse).to.have.property("id");
+        expect(parseResponse).to.have.property("name");
+        expect(parseResponse).to.have.property("quantity");
+      });
+    } );
+  });
 });
