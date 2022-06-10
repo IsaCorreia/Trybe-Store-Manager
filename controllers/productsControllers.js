@@ -11,9 +11,7 @@ const {
 
 productsRouter.get('/', async (req, res) => {
   const products = await productsService.getProducts({ id: false });
-  return products === undefined
-    ? res.status(HTTP_NOT_FOUND_STATUS).json({ message: 'Product not found' })
-    : res.status(HTTP_OK_STATUS).json(products);
+  return res.status(HTTP_OK_STATUS).json(products);
 });
 
 productsRouter.get('/:id', async (req, res) => {

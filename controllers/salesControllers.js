@@ -9,9 +9,7 @@ const {
 
 salesRouter.get('/', async (req, res) => {
   const sales = await salesService.getSales({ id: false });
-  return !sales.length
-    ? res.status(HTTP_NOT_FOUND_STATUS).json({ message: 'Sale not found' })
-    : res.status(HTTP_OK_STATUS).json(sales);
+  return res.status(HTTP_OK_STATUS).json(sales);
 });
 
 salesRouter.get('/:id', async (req, res) => {
