@@ -45,5 +45,23 @@ describe("---> Teste de Controllers: Sales", () => {
         expect(parseResponse[0]).to.have.property("date");
       });
     } );
+    describe("com ID inválido", () => {
+      let response;
+      before( async () => {
+        response = await chai.request(server).get("/sales/100");
+      });
+
+      it("É recebido código 404",  () => {
+        expect(response).to.have.status(404);
+      });
+
+      it("É recebido a mensagem 'Sale not found'",  () => {
+        expect(response).to.be.an("object");
+
+        const parseResponse = JSON.parse(response.text);
+        expect(parseResponse).to.have.property("message");
+        expect(parseResponse.message).to.be.an.string("Sale not found");
+      });
+    } );
   });
 });
