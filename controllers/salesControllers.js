@@ -17,7 +17,13 @@ const addSale = async (req, res) => {
   return res.status(HTTP_CREATED_STATUS).json(newSale);
 };
 
+const updateSale = async (req, res) => {
+  const updatedSale = await salesService.updateSale(req.params, ...req.body);
+  return res.status(HTTP_OK_STATUS).json(updatedSale);
+};
+
 module.exports = {
   getSales,
   addSale,
+  updateSale,
 };
