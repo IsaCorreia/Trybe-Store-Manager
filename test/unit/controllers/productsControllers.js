@@ -46,5 +46,23 @@ describe("---> Teste de Controllers: Products", () => {
         expect(parseResponse).to.have.property("quantity");
       });
     } );
+    describe("com ID inválido", () => {
+      let response;
+      before( async () => {
+        response = await chai.request(server).get("/products/100");
+      });
+
+      it("É recebido código 404",  () => {
+        expect(response).to.have.status(404);
+      });
+
+      it("É recebido a mensagem 'Product not found'",  () => {
+        expect(response).to.be.an("object");
+
+        const parseResponse = JSON.parse(response.text);
+        expect(parseResponse).to.have.property("message");
+        expect(parseResponse.message).to.be.an.string("Product not found");
+      });
+    } );
   });
 });
