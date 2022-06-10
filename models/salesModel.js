@@ -37,8 +37,15 @@ const addSale = async (productId, quantity) => {
     + '(sale_id, product_id, quantity) '
     + 'VALUES(?, ?, ?);';
   await connection.execute(addSalesProductQuery, [saleId, productId, quantity]);
-  
+
   return saleId;
+};
+
+const updateSale = async (saleId, productId, quantity) => {
+  const updatedSaleQuery = 'UPDATE StoreManager.sales_products '
+    + 'SET quantity = ? WHERE sale_id = ? AND product_id = ?;';
+  await connection.execute(updatedSaleQuery, [quantity, saleId, productId]);
+  return getSalesById(saleId);
 };
 
 module.exports = {
@@ -46,4 +53,5 @@ module.exports = {
   getSalesById,
   getLastSale,
   addSale,
+  updateSale,
 };
