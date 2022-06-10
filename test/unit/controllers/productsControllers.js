@@ -83,17 +83,17 @@ describe("---> Teste de Controllers: Products", () => {
       let response = {};
 
       before(async () => {
-        // request.body = {};
-        // sinon.stub(productsService, "getProducts").resolves(errorMock);
+        request.body = {};
+        sinon.stub(productsService, "getProducts").resolves(errorMock);
         response = await chai.request(app).get("/products/100");
       });
-      // after(() => {
-      //   productsService.getProducts.restore();
-      // });
-
-      it("É recebido código 404", () => {
-        expect(response).to.have.status(404);
+      after(() => {
+        productsService.getProducts.restore();
       });
+
+      // it("É recebido código 404", () => {
+      //   expect(response).to.have.status(404);
+      // });
 
       it("É recebido a mensagem 'Product not found'", () => {
         expect(response).to.be.an("object");
