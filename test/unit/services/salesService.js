@@ -4,27 +4,14 @@ const { expect } = chai;
 
 const salesService = require("../../../services/salesService");
 const salesModel = require("../../../models/salesModel");
-const allSalesMock = [
-  {
-    saleId: 1,
-    productId: 1,
-    quantity: 1,
-    date: "",
-  },
-];
-
-const idSaleMock = [
-  {
-    productId: 1,
-    quantity: 1,
-    date: "",
-  },
-];
+const {
+  serviceMocks: { getSalesMock, getSalesByIdMock },
+} = require("../mocks");
 
 describe("---> Teste de Service: Sales", () => {
   describe("getSales sem id", () => {
     before(() => {
-      sinon.stub(salesModel, "getSales").returns(allSalesMock);
+      sinon.stub(salesModel, "getSales").returns(getSalesMock);
     });
     after(() => {
       salesModel.getSales.restore();
@@ -38,9 +25,9 @@ describe("---> Teste de Service: Sales", () => {
     });
   });
 
-  describe.skip("getSales com id", () => {
+  describe("getSales com id", () => {
     before(() => {
-      sinon.stub(salesModel, "getSalesById").returns(idSaleMock[0]);
+      sinon.stub(salesModel, "getSalesById").returns(getSalesByIdMock);
     });
     after(() => {
       salesModel.getSalesById.restore();
