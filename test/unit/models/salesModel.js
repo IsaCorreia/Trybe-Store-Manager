@@ -22,4 +22,18 @@ describe("---> Teste de Model: Sales", () => {
       expect(result).to.be.an("array");
     });
   });
+
+  describe("getSalesById", () => {
+    before(() => {
+      sinon.stub(connection, "execute").resolves(getSalesMock);
+    });
+    after(() => {
+      connection.execute.restore();
+    });
+
+    it("Retorna a compra selecionada", async () => {
+      const result = await salesModel.getSalesById(1);
+      expect(result).to.be.an("array");
+    });
+  });
   });
