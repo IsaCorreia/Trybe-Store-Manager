@@ -41,12 +41,41 @@ describe("---> Teste de Service: Products", () => {
     });
   });
 
-      expect( response ).to.be.an( 'object' );
+  describe("addProducts", () => {
+    describe("Produto válido", () => {
+      before(() => {
+        sinon.stub(productsModel, "getProducts").returns(getProductsMock);
+        sinon.stub(productsModel, "addProduct").returns(addProductMock);
       });
-    it( "Inválido, retorna código 404 - Product not found", async () => {
-      const response = await productsService.getProducts({id: 100});
+      after(() => {
+        productsModel.addProduct.restore();
+        productsModel.getProducts.restore();
+      });
+      it("retorna o objeto do produto cadastrado", async () => {
+        const response = await productsService.addProduct({
+          name: "produto",
+          quantity: 10,
+        });
+        expect(response).to.an("object");
+      });
+    });
 
-      expect( response ).to.be.an( 'object' );
+    describe("Produto inválido - já existe", () => {
+      before(() => {
+        sinon.stub(productsModel, "getProducts").returns([addProductMock]);
+        sinon.stub(productsModel, "addProduct").returns(addProductMock);
+      });
+      after(() => {
+        productsModel.addProduct.restore();
+        productsModel.getProducts.restore();
+      });
+      it("retorna 'false'", async () => {
+        const response = await productsService.addProduct({
+          name: "produto",
+          quantity: 10,
+        });
+        expect(response).to.be.false;
+      });
     });
   });
 });
