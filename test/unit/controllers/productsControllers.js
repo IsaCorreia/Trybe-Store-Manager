@@ -1,106 +1,140 @@
 const sinon = require("sinon");
 const chai = require("chai");
-const chaiHttp = require("chai-http");
-chai.use(chaiHttp);
 const { expect } = chai;
 
+const {
+  controllerMocks: {
+    getProductsMock,
+    productErrorMock,
+    getProductsByIdMock,
+    addProductMock,
+  },
+} = require("../mocks");
 const productsService = require("../../../services/productsService");
-const app = require("../../../app");
-
-const productsMock = [
-  {
-    id: 1,
-    name: "Martelo do Thor",
-    quantity: 6,
-  },
-  {
-    id: 2,
-    name: "Escudo do Capitão América",
-    quantity: 10,
-  },
-];
-
-const errorMock = { message: "Product not found" };
+const productsController = require("../../../controllers/productsControllers");
 
 describe("---> Teste de Controllers: Products", () => {
-  describe("GET /products", () => {
+  describe("getProducts sem id", () => {
     let request = {};
     let response = {};
 
     before(async () => {
       request.body = {};
-      sinon.stub(productsService, "getProducts").resolves(productsMock);
-      response = await chai.request(app).get("/products");
+      response.status = sinon.stub().returns(response);
+      response.json = sinon.stub().returns(getProductsMock);
+      sinon.stub(productsService, "getProducts").resolves(getProductsMock);
     });
 
     after(() => {
       productsService.getProducts.restore();
     });
 
-    it("É recebido código 200", () => {
-      expect(response).to.have.status(200);
+    it("É recebido código 200", async () => {
+      await productsController.getProducts(request, response);
+      expect(response.status.calledWith(200)).to.be.true;
     });
 
-    it("É recebido a lista de produtos", () => {
-      expect(response).to.be.an("object");
+    it("É recebido a lista de produtos", async () => {
+      const result = await productsController.getProducts(request, response);
 
-      const parseResponse = JSON.parse(response.text);
-      expect(parseResponse[0]).to.have.property("id");
-      expect(parseResponse[0]).to.have.property("name");
-      expect(parseResponse[0]).to.have.property("quantity");
+      expect(result).to.be.an("array");
+      expect(result[0]).to.have.property("id");
+      expect(result[0]).to.have.property("name");
+      expect(result[0]).to.have.property("quantity");
     });
   });
 
-  describe(" GET /products/:id", () => {
-    describe("com ID válido", () => {
+  describe("getProducts com id", () => {
+    describe("válido", () => {
       let request = {};
       let response = {};
 
       before(async () => {
+        request.params = { id: 1 };
         request.body = {};
-        sinon.stub(productsService, "getProducts").resolves(productsMock[0]);
-        response = await chai.request(app).get("/products");
+        response.status = sinon.stub().returns(response);
+        response.json = sinon.stub().returns(getProductsByIdMock);
+        sinon
+          .stub(productsService, "getProducts")
+          .resolves(getProductsByIdMock);
       });
+
       after(() => {
         productsService.getProducts.restore();
       });
 
-      it("É recebido código 200", () => {
-        expect(response).to.have.status(200);
+      it("É recebido código 200", async () => {
+        await productsController.getProducts(request, response);
+        expect(response.status.calledWith(200)).to.be.true;
       });
 
-      it("É recebido o produto selecionado", () => {
-        expect(response).to.be.an("object");
-
-        const parseResponse = JSON.parse(response.text);
-        expect(parseResponse).to.have.property("id");
-        expect(parseResponse).to.have.property("name");
-        expect(parseResponse).to.have.property("quantity");
+      it("É recebido o produto selecionado", async () => {
+        const result = await productsController.getProducts(request, response);
+        expect(result).to.be.an("array");
+        expect(result[0]).to.have.property("id");
+        expect(result[0]).to.have.property("name");
+        expect(result[0]).to.have.property("quantity");
       });
     });
-    describe("com ID inválido", () => {
+
+    describe("inválido", () => {
       let request = {};
       let response = {};
 
       before(async () => {
+        request.params = { id: 100 };
         request.body = {};
-        sinon.stub(productsService, "getProducts").resolves(errorMock);
-        response = await chai.request(app).get("/products/100");
+        response.status = sinon.stub().returns(response);
+        response.json = sinon.stub().returns(productErrorMock);
+        sinon.stub(productsService, "getProducts").resolves(productErrorMock);
       });
+
       after(() => {
         productsService.getProducts.restore();
       });
 
-      // it("É recebido código 404", () => {
-      //   expect(response).to.have.status(404);
+      // it.skip("É recebido código 404", async () => {
+      //   // res.status = [Function:  functionStub]
+      //   await productsController.getProducts(request, response);
+      //   expect(response.status.calledWith(404)).to.be.true;
       // });
 
-      it("É recebido a mensagem 'Product not found'", () => {
-        expect(response).to.be.an("object");
+      it("É recebido a mensagem 'Product not found'", async () => {
+        const result = await productsController.getProducts(request, response);
+        expect(result).to.be.an("object");
+        expect(result).to.have.property("message");
+        expect(result.message).to.be.an.string("Product not found");
+      });
+    });
+  });
 
-        const parseResponse = JSON.parse(response.text);
-        expect(parseResponse).to.have.property("message");
-        expect(parseResponse.message).to.be.an.string("Product not found");
+  describe("addProduct", () => {
+    describe("com produto não cadastrado", () => {
+      let request = {};
+      let response = {};
+
+      before(() => {
+        request.body = { name: "Manopla do Thanos", quantity: 1 };
+        response.status = sinon.stub().returns(response);
+        response.json = sinon.stub().returns(addProductMock);
+        sinon.stub(productsService, "addProduct").resolves(addProductMock);
+      });
+
+      after(() => {
+        productsService.addProduct.restore();
+      });
+
+      it("retorna código 201", async () => {
+        await productsController.addProduct(request, response);
+        expect(response.status.calledWith(201)).to.be.true;
+      });
+
+      it("retorna as informações do produto cadastrado", async () => {
+        const result = await productsController.addProduct(request, response);
+        expect(result).to.be.an("object");
+        expect(result).to.have.property("id");
+        expect(result).to.have.property("name");
+        expect(result).to.have.property("quantity");
       });
     });
   });
