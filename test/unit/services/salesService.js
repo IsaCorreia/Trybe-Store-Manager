@@ -33,15 +33,15 @@ describe("---> Teste de Service: Sales", () => {
       salesModel.getSalesById.restore();
     });
 
-    it( "Válido, retorna o produto selecionado", async () => {
-      const response = await salesService.getSales({id: 1});
+    it("Válido, retorna o produto selecionado", async () => {
+      const response = await salesService.getSales({ id: 1 });
 
-      expect( response ).to.be.an( 'object' );
+      expect(response).to.be.an("array");
     });
-    it( "Inválido, retorna código 404 - Product not found", async () => {
-      const response = await salesService.getSales({id: 100});
+    it("Inválido, retorna código 404 - Product not found", async () => {
+      const response = await salesService.getSales({ id: 100 });
 
-      expect( response ).to.be.an( 'object' );
+      expect(response).to.be.an("array");
     });
   });
 });
