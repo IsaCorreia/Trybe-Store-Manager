@@ -16,12 +16,9 @@ describe("---> Teste de Service: Sales", () => {
     after(() => {
       salesModel.getSales.restore();
     });
-    it( "Retorna a lista de todos os produtos", async () => {
-      const response = await salesService.getSales( { id: false } );
-      // console.log('test:', response);
-
-      expect( response ).to.be.an('array');
-      // expect( response[0] ).to.be.an( 'object' );
+    it("Retorna a lista de todos os produtos", async () => {
+      const response = await salesService.getSales({ id: false });
+      expect(response).to.be.an("array");
     });
   });
 

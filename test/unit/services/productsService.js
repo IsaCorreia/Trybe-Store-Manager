@@ -16,11 +16,10 @@ describe("---> Teste de Service: Products", () => {
     after(() => {
       productsModel.getProducts.restore();
     });
-    it( "Retorna a lista de todos os produtos", async () => {
-      const response = await productsService.getProducts({id: false});
-
-      expect( response ).to.be.an( 'array' );
-      expect( response[0] ).to.be.an( 'object' );
+    it("Retorna a lista de todos os produtos", async () => {
+      const response = await productsService.getProducts({ id: false });
+      expect(response).to.be.an("array");
+      expect(response[0]).to.be.an("object");
     });
   });
 
