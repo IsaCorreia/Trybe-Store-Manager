@@ -31,8 +31,15 @@ describe("---> Teste de Service: Products", () => {
       productsModel.getProductsById.restore();
     });
 
-    it( "Válido, retorna o produto selecionado", async () => {
-      const response = await productsService.getProducts({id: 1});
+    it("Válido, retorna o produto selecionado", async () => {
+      const response = await productsService.getProducts({ id: 1 });
+      expect(response).to.be.an("object");
+    });
+    it("Inválido, retorna código 404 - Product not found", async () => {
+      const response = await productsService.getProducts({ id: 100 });
+      expect(response).to.be.an("object");
+    });
+  });
 
       expect( response ).to.be.an( 'object' );
       });
