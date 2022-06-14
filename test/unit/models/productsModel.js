@@ -5,12 +5,14 @@ const { expect } = chai;
 const connection = require("../../../models/connection");
 const productsModel = require( '../../../models/productsModel' );
 
-const productMock = [];
+const {
+  modelMocks: { getProductsMock },
+} = require("../mocks");
 
 describe("---> Teste de Model: Products", () => {
   describe("getProducts", () => {
     before(() => {
-      sinon.stub(connection, "execute").resolves(productMock);
+      sinon.stub(connection, "execute").resolves(getProductsMock);
     });
     after(() => {
       connection.execute.restore();
