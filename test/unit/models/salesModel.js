@@ -50,4 +50,4 @@ describe("---> Teste de Model: Sales", () => {
       expect(result).to.equal(1);
     });
   });
-  });
+});
