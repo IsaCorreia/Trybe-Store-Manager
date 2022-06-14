@@ -1,41 +1,23 @@
 const sinon = require("sinon");
 const chai = require("chai");
-// const chaiHttp = require("chai-http");
-// chai.use(chaiHttp);
 const { expect } = chai;
 
+const {
+  controllerMocks: { getSalesMock, getSalesByIdMock, saleErrorMock },
+} = require("../mocks");
 const salesController = require("../../../controllers/salesControllers");
 const salesService = require("../../../services/salesService");
-// const app = require("../../../app");
-
-const allSalesMock = [
-  {
-    saleId: 1,
-    productId: 1,
-    quantity: 1,
-    date: "",
-  },
-];
-
-const idSaleMock = [
-  {
-    productId: 1,
-    quantity: 1,
-    date: "",
-  },
-];
-
-const errorMock = { message: "Sale not found" };
 
 describe("---> Teste de Controllers: Sales", () => {
   describe("GET /sales", () => {
     let request = {};
     let response = {};
+
     before(async () => {
       request.body = {};
       response.status = sinon.stub().returns(response);
-      response.json = sinon.stub().returns(allSalesMock);
-      sinon.stub(salesService, "getSales").resolves(allSalesMock);
+      response.json = sinon.stub().returns(getSalesMock);
+      sinon.stub(salesService, "getSales").resolves(getSalesMock);
     });
 
     after(() => {
@@ -49,6 +31,7 @@ describe("---> Teste de Controllers: Sales", () => {
 
     it("É recebido a lista de vendas", async () => {
       const result = await salesController.getSales(request, response);
+
       expect(result).to.be.an("array");
       expect(result[0]).to.have.property("saleId");
       expect(result[0]).to.have.property("productId");
@@ -61,12 +44,13 @@ describe("---> Teste de Controllers: Sales", () => {
     describe("com ID válido", () => {
       let request = {};
       let response = {};
+
       before(async () => {
         request.params = { id: 1 };
         request.body = {};
         response.status = sinon.stub().returns(response);
-        response.json = sinon.stub().returns(idSaleMock);
-        sinon.stub(salesService, "getSales").resolves(idSaleMock);
+        response.json = sinon.stub().returns(getSalesByIdMock);
+        sinon.stub(salesService, "getSales").resolves(getSalesByIdMock);
       });
 
       after(() => {
@@ -86,15 +70,17 @@ describe("---> Teste de Controllers: Sales", () => {
         expect(result[0]).to.have.property("date");
       });
     });
+
     describe("com ID inválido", () => {
       let request = {};
       let response = {};
+
       before(async () => {
         request.params = { id: 100 };
         request.body = {};
         response.status = sinon.stub().returns(response);
-        response.json = sinon.stub().returns(errorMock);
-        sinon.stub(salesService, "getSales").resolves(errorMock);
+        response.json = sinon.stub().returns(saleErrorMock);
+        sinon.stub(salesService, "getSales").resolves(saleErrorMock);
       });
 
       after(() => {
