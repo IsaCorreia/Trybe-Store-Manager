@@ -31,6 +31,8 @@ const serviceMocks = {
     { saleId: 2, productId: 2, quantity: 2, date: "" },
   ],
   getSalesByIdMock: [{ productId: 1, quantity: 1, date: "" }],
+  addSaleMock: [{ productId: 1, quantity: 1 }],
+  resultSaleMock: { id: 1, itemsSold: [{ productId: 1, quantity: 1 }] },
 };
 const modelMocks = {
   getSalesMock: [
