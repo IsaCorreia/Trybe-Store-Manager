@@ -5,7 +5,7 @@ const { expect } = chai;
 const salesService = require("../../../services/salesService");
 const salesModel = require("../../../models/salesModel");
 const {
-  serviceMocks: { getSalesMock, getSalesByIdMock },
+  serviceMocks: { getSalesMock, getSalesByIdMock, addSaleMock, resultSaleMock },
 } = require("../mocks");
 
 describe("---> Teste de Service: Sales", () => {
@@ -39,6 +39,22 @@ describe("---> Teste de Service: Sales", () => {
       const response = await salesService.getSales({ id: 100 });
 
       expect(response).to.be.an("array");
+    });
+  });
+
+  describe("addSale", () => {
+    before(() => {
+      sinon.stub(salesModel, "addSale").resolves(resultSaleMock);
+      sinon.stub(salesModel, "getLastSale").resolves(1);
+    });
+    after(() => {
+      salesModel.addSale.restore();
+      salesModel.getLastSale.restore();
+    });
+    it("Retorna a venda adicionada", async () => {
+      result = await salesService.addSale(addSaleMock);
+
+      expect(result).to.be.an("object");
     });
   });
 });
