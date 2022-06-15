@@ -3,6 +3,7 @@ const {
   HTTP_OK_STATUS,
   HTTP_NOT_FOUND_STATUS,
   HTTP_CREATED_STATUS,
+  HTTP_NO_CONTENT_STATUS,
 } = require('../helpers/httpStatusCodes');
 
 const getSales = async (req, res) => {
@@ -22,8 +23,16 @@ const updateSale = async (req, res) => {
   return res.status(HTTP_OK_STATUS).json(updatedSale);
 };
 
+const deleteSale = async (req, res) => {
+  const deletedSale = await salesService.deleteSale(req.params);
+  return deletedSale === false
+    ? res.status(HTTP_NOT_FOUND_STATUS).json({ message: 'Sale not found' })
+    : res.status(HTTP_NO_CONTENT_STATUS).send();
+};
+
 module.exports = {
   getSales,
   addSale,
   updateSale,
+  deleteSale,
 };
