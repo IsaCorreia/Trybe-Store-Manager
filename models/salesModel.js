@@ -48,10 +48,18 @@ const updateSale = async (saleId, productId, quantity) => {
   return getSalesById(saleId);
 };
 
+const deleteSale = async (id) => {
+  const deleteSalesQuery = 'DELETE FROM StoreManager.sales WHERE id = ?';
+  await connection.execute(deleteSalesQuery, [id]);
+  const deleteSalesProductQuery = 'DELETE FROM StoreManager.sales_products WHERE sale_id = ?';
+  await connection.execute(deleteSalesProductQuery, [id]);
+};
+
 module.exports = {
   getSales,
   getSalesById,
   getLastSale,
   addSale,
   updateSale,
+  deleteSale,
 };
