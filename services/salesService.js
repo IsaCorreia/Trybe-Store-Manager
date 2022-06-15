@@ -41,9 +41,16 @@ const updateSale = async ({ id }, { productId: prodID, quantity: qty }) => {
   );
   return result;
 };
+const deleteSale = async ({ id }) => {
+  const canDelete = await salesModel.getSalesById(id);
+  if (!canDelete.length) return false;
+  await salesModel.deleteSale(id);
+  return true;
+};
 
 module.exports = {
   getSales,
   addSale,
   updateSale,
+  deleteSale,
 };
