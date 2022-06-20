@@ -36,18 +36,4 @@ describe("---> Teste de Model: Sales", () => {
       expect(result).to.be.an("array");
     });
   });
-
-  describe("getLastSale", () => {
-    before(() => {
-      sinon.stub(connection, "execute").resolves(getSalesMock);
-    });
-    after(() => {
-      connection.execute.restore();
-    });
-
-    it("Retorna a compra selecionada", async () => {
-      const result = await salesModel.getLastSale();
-      expect(result).to.equal(1);
-    });
-  });
 });
