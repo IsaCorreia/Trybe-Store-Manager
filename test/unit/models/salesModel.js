@@ -36,4 +36,14 @@ describe("---> Teste de Model: Sales", () => {
       expect(result).to.be.an("array");
     });
   });
+
+  describe("addSale", () => {
+    before(() => sinon.stub(connection, "execute").resolves([{ insertId: 1 }]));
+    after(() => connection.execute.restore());
+
+    it("Retorna o ID da compra adicionada", async () => {
+      const result = await salesModel.addSale(1, 1);
+      expect(result).to.equal(1);
+    });
+  });
 });
