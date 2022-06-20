@@ -10,12 +10,8 @@ const {
 
 describe("---> Teste de Model: Sales", () => {
   describe("getSales", () => {
-    before(() => {
-      sinon.stub(connection, "execute").resolves(getSalesMock);
-    });
-    after(() => {
-      connection.execute.restore();
-    });
+    before(() => sinon.stub(connection, "execute").resolves(getSalesMock));
+    after(() => connection.execute.restore());
 
     it("Retorna todas as compras", async () => {
       const result = await salesModel.getSales();
@@ -24,12 +20,8 @@ describe("---> Teste de Model: Sales", () => {
   });
 
   describe("getSalesById", () => {
-    before(() => {
-      sinon.stub(connection, "execute").resolves(getSalesMock);
-    });
-    after(() => {
-      connection.execute.restore();
-    });
+    before(() => sinon.stub(connection, "execute").resolves(getSalesMock));
+    after(() => connection.execute.restore());
 
     it("Retorna a compra selecionada", async () => {
       const result = await salesModel.getSalesById(1);
