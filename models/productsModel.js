@@ -32,10 +32,17 @@ const deleteProduct = async (id) => {
   await connection.execute(deleteQuery, [id]);
 };
 
+const getProductStock = async (productId) => {
+  const getStockQuery = 'SELECT quantity FROM StoreManager.products WHERE id = ?;';
+  const [[{ quantity }]] = await connection.execute(getStockQuery, [productId]);
+  return quantity;
+};
+
 module.exports = {
   getProducts,
   getProductsById,
   addProduct,
   updateProduct,
   deleteProduct,
+  getProductStock,
 };
