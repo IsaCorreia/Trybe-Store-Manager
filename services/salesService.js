@@ -20,10 +20,12 @@ const getSales = async ({ id }) => {
 };
 
 const addSale = async (sales) => {
-  await sales.forEach(async ({ productId, quantity }) =>
-    salesModel.addSale(productId, quantity));
+  let id;
+  await sales.forEach(({ productId, quantity }) => {
+    id = salesModel.addSale(productId, quantity);
+  });
   return {
-    id: await salesModel.getLastSale(),
+    id,
     itemsSold: sales.map(({ productId, quantity }) => ({
       productId,
       quantity,
