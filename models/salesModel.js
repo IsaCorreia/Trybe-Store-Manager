@@ -17,20 +17,17 @@ const getSalesById = async (id) => {
   return result;
 };
 
-const getLastSale = async () => {
-  const getLastSaleQuery = 'SELECT * FROM StoreManager.sales '
-    + 'ORDER BY id DESC LIMIT 1;';
-  const [[{ id: saleId }]] = await connection.execute(getLastSaleQuery);
-  return saleId;
-};
+// const getLastSale = async () => {
+//   const getLastSaleQuery = 'SELECT * FROM StoreManager.sales '
+//     + 'ORDER BY id DESC LIMIT 1;';
+//   const [[{ id: saleId }]] = await connection.execute(getLastSaleQuery);
+//   return saleId;
+// };
 
 const addSale = async (productId, quantity) => {
   // Add into sales table first
   const addSalesQuery = 'INSERT INTO StoreManager.sales() VALUES();';
-  await connection.execute(addSalesQuery);
-
-  // Get last sale ID
-  const saleId = await getLastSale();
+  const [{ insertId: saleId }] = await connection.execute(addSalesQuery);
 
   // Add into sales_products
   const addSalesProductQuery = 'INSERT INTO StoreManager.sales_products'
@@ -58,7 +55,7 @@ const deleteSale = async (id) => {
 module.exports = {
   getSales,
   getSalesById,
-  getLastSale,
+  // getLastSale,
   addSale,
   updateSale,
   deleteSale,
