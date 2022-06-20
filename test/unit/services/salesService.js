@@ -45,11 +45,9 @@ describe("---> Teste de Service: Sales", () => {
   describe("addSale", () => {
     before(() => {
       sinon.stub(salesModel, "addSale").resolves(resultSaleMock);
-      sinon.stub(salesModel, "getLastSale").resolves(1);
     });
     after(() => {
       salesModel.addSale.restore();
-      salesModel.getLastSale.restore();
     });
     it("Retorna a venda adicionada", async () => {
       result = await salesService.addSale(addSaleMock);
