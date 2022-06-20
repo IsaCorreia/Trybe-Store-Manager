@@ -34,7 +34,8 @@ const addSale = async (sales) => {
 };
 
 const updateSale = async ({ id }, { productId: prodID, quantity: qty }) => {
-  const updatedSale = await salesModel.updateSale(id, prodID, qty);
+  await salesModel.updateSale(id, prodID, qty);
+  const updatedSale = await salesModel.getSalesById(id);
   const [result] = updatedSale.map(
     ({ sale_id: saleId, product_id: productId, quantity }) => ({
       saleId,
