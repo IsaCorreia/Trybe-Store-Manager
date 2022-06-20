@@ -36,4 +36,15 @@ describe("---> Teste de Model: Products", () => {
       expect(result).to.be.an("object");
     });
   });
+
+  describe("getProductStock", () => {
+    before(() => {
+      sinon.stub(connection, "execute").resolves([[{ quantity: 1 }]]);
+    });
+    after(() => connection.execute.restore());
+    it("Retorna a quantidade do produto selecionado", async () => {
+      const result = await productsModel.getProductStock(1);
+      expect(result).to.equal(1);
+    });
+  });
 });
